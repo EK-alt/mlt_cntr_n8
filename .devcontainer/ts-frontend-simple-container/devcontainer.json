@@ -1,0 +1,9 @@
+{
+    "name": "Ts-Frontend Simple",
+    "dockerComposeFile": [
+        "../../docker-compose-dev.yaml"
+    ],
+    "service": "ts-frontend-simple-n1",
+    "shutdownAction": "none",
+    "workspaceFolder": "/workspace/ts-frontend"
+}
