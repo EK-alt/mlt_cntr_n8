@@ -25,11 +25,38 @@ services:
       context: ./actix-webapp
       dockerfile: Dockerfile
     init: true
-    # networks:
-    #   - app_network
+    depends_on:
+      - mysqldb
+    environment:
+      - DATABASE_URL=mysql://homestead:secret@mysqldb:3307/homestead
+    networks:
+      - app_network
     ports:
       - 9093:9093
     restart: unless-stopped
 
-# networks:
-#   app_network:
+  mysqldb:
+    # container_name: mysqldb
+    restart: always
+    ports:
+      - 33071:3307
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # - ./mysql-config.cnf:/etc/mysql/conf.d/mysql-config.cnf
+      # - .:/workspace:cached
+    environment:
+      - MYSQL_DATABASE=homestead
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=secret
+    image: mysql:latest
+    command: --bind-address=0.0.0.0 --port=3307
+    networks:
+      - app_network
+
+networks:
+  app_network:
+
+
+volumes:
+  mysql_data: #   edgedb_rust_data: # Named volume for EdgeDB data
