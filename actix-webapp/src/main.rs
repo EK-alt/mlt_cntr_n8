@@ -120,28 +120,21 @@ async fn get_date_time_from_edge_db() -> String {
         .await
         .unwrap();
     let client: Client = Client::new(&config);
-    // .ensure_connected()
-    // .await
-    // .expect("Client should have initiated");
 
-    // // Ensure a connection is established
     match client.ensure_connected().await {
         Ok(_) => println!("Successfully connected to EdgeDB!"),
         Err(e) => eprintln!("Failed to connect to EdgeDB: {:?}", e),
     }
 
-    // let timestamp = get_current_timestamp(&conn).await?;
     let result: String = client
         .query_required_single("SELECT <str>datetime_of_statement()", &())
         .await
         .expect("Failed to get current timestamp");
 
     println!("Current UTC timestamp: {}", result);
-    // println!("EdgeDB Timestamp: {}", timestamp);
-    // Ok(())
-    "Hello form EdgeDB".to_string()
-    // return Ok(result);
-    // return result;
+
+    // "Hello form EdgeDB".to_string();
+    result
 }
 
 async fn hello() -> impl Responder {
@@ -155,12 +148,21 @@ async fn hello() -> impl Responder {
 
     println!("aRes {:?} ", result);
 
+    // let tm_lcl;
     let join_handle = tokio::spawn(async {
         let tm = get_date_time_from_edge_db().await;
-    });
+        tm
+    })
+    .await
+    .expect("Tokio spawn failed");
+
+    println!("tm_lcl: {}", join_handle);
 
     let result = result[0].clone();
-    format!("Hello, world! and response from MySQL {}", result)
+    format!(
+        "Hello, world! and response from MySQL {} && from EdgeDB {}",
+        result, join_handle
+    )
 }
 
 #[actix_web::main]
