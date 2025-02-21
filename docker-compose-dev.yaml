@@ -28,7 +28,7 @@ services:
       - app_network
     depends_on:
       - mysqldb
-      # - edgedb_rust
+      - edgedb_rust
     environment:
       - DATABASE_URL=mysql://homestead:secret@mysqldb:3307/homestead
     # - EDGEDB_HOST=edgedb # Add this line
@@ -95,25 +95,26 @@ services:
     networks:
       - app_network
 
-#   edgedb_rust:
-#     image: edgedb/edgedb
-#     ports:
-#       - "5657:5656"
-#     environment:
-#       EDGEDB_PASSWORD: edgedb
-#       EDGEDB_USER: edgedb
-#       EDGEDB_DATABASE: edgedb
-#       # EDGEDB_PORT: 5656
-#       EDGEDB_HOST: localhost # Important: This refers to the host *inside* the container
-#       EDGEDB_SERVER_TLS_CERT_MODE: generate_self_signed
-#       EDGEDB_CLIENT_TLS_SECURITY: insecure # Use with extreme caution in development only
-#       EDGEDB_INSTANCE: edgedb_inst_n2
-#     command: --bind-address=0.0.0.0 --port=5656
-#     volumes:
-#       # For persistent data (optional, but highly recommended)
-#       - edgedb_rust_data:/var/lib/edgedb/data
-#     networks:
-#       - app_network
+  edgedb_rust:
+    image: edgedb/edgedb
+    ports:
+      - "5657:5656"
+    environment:
+      EDGEDB_PASSWORD: edgedb
+      EDGEDB_USER: edgedb
+      EDGEDB_DATABASE: edgedb
+      # EDGEDB_PORT: 5656
+      EDGEDB_HOST: localhost # Important: This refers to the host *inside* the container
+      EDGEDB_SERVER_TLS_CERT_MODE: generate_self_signed
+      EDGEDB_CLIENT_TLS_SECURITY: insecure # Use with extreme caution in development only
+      EDGEDB_INSTANCE: edgedb_inst_n2
+    command: --bind-address=0.0.0.0 --port=5656
+    volumes:
+      # For persistent data (optional, but highly recommended)
+      - edgedb_rust_data:/var/lib/edgedb/data
+    networks:
+      - app_network
 
 volumes:
-  mysql_data: #   edgedb_rust_data: # Named volume for EdgeDB data
+  mysql_data:
+  edgedb_rust_data: # Named volume for EdgeDB data

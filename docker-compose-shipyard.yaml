@@ -66,6 +66,7 @@ services:
       EDGEDB_HOST: localhost # Important: This refers to the host *inside* the container
       EDGEDB_SERVER_TLS_CERT_MODE: generate_self_signed
       EDGEDB_CLIENT_TLS_SECURITY: insecure # Use with extreme caution in development only
+      EDGEDB_SERVER_SECURITY: insecure_dev_mode
       # EDGEDB_INSTANCE: edgedb_inst_n2
     command: --bind-address=0.0.0.0 --port=5656
     volumes:
